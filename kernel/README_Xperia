@@ -1,0 +1,19 @@
+Configuration files can be found in arch/arm/configs.
+
+Xperia V LT25i => blue_tsubasa_defconfig
+
+To flash your kernel using Fastboot perform the following steps:
+
+1) Make sure you have sourced your envsetup.sh
+  From within the prebuild android tree, $source build/envsetup.sh <enter>
+  AND $lunch <target> <enter> OR $setpaths <enter>
+2) Fetch the script mkelf.py. It can be found here:
+http://developer.sonymobile.com/2012/03/20/xperia-s-open-source-archive-released-with-building-instructions/
+3) Create a textfile cmdline.bin. This file shall contain the command line:
+  androidboot.hardware=sony user_debug=31 androidboot.baseband=msm lpj=67632
+4) The RPM.bin file can be found at the same place as ramdisk.img.
+5) $ python mkelf.py -o kernel.elf zImage@0x80208000 ramdisk.img@0x81300000,ramdisk \
+     RPM.bin@0x20000,rpm cmdline.bin@0x0,cmdline
+6) Flash the kernel image:
+  $ fastboot flash boot kernel.elf
+
